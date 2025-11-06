@@ -86,7 +86,7 @@ const createSuccessResponse = async (
   const currentVcsEncoded: string[] = identityResponse.vcs.map((vcWithMetadata) => vcWithMetadata.vc);
   const currentVcs: VerifiableCredentialJWT[] = parseCurrentVerifiableCredentials(identityResponse);
   const fraudVc = getFraudVc(currentVcs, configuration.fraudIssuer);
-  const content: StoredIdentityJWT = getJwtBody(identityResponse.si.vc);
+  const content = getJwtBody<StoredIdentityJWT>(identityResponse.si.vc);
   const kid = getJwtHeader(identityResponse.si.vc).kid || "";
   const validationResults = await validateCryptography(kid, identityResponse);
   const vot: StoredIdentityVectorOfTrust = calculateVot(content, identityResponse.si.unsignedVot, vtr);
@@ -95,7 +95,7 @@ const createSuccessResponse = async (
   await auditIdentityRecordRead(
     {
       retrieval_outcome: "success",
-      max_vot: content.vot,
+      max_vot: content.max_vot || identityResponse.si.unsignedVot,
       ...(fraudVc ? { timestamp_fraud_check_iat: fraudVc?.iat } : {}),
     },
     {
@@ -105,10 +105,11 @@ const createSuccessResponse = async (
     govukSigninJourneyId
   );
 
+  const { max_vot: _, ...sanitisedContent } = content;
   const successResponse: UserIdentityResponse = {
-    content: { ...content, vot, vtm },
-    vot: content.vot,
-    isValid: validateStoredIdentityCredentials(content, currentVcsEncoded),
+    content: { ...sanitisedContent, vot, vtm },
+    vot: sanitisedContent.vot,
+    isValid: validateStoredIdentityCredentials(sanitisedContent, currentVcsEncoded),
     expired: hasFraudCheckExpired(fraudVc, configuration.fraudValidityPeriod),
     ...validationResults,
   };

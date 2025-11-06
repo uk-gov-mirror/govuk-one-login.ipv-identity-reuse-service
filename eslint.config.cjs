@@ -52,6 +52,7 @@ module.exports = defineConfig([
         "error",
         {
           caughtErrorsIgnorePattern: "^ignore",
+          varsIgnorePattern: "_",
         },
       ],
 

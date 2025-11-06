@@ -1,6 +1,7 @@
 import { Then } from "@cucumber/cucumber";
 import { WorldDefinition } from "./base-verbs.step";
 import assert from "assert";
+import { IdentityVectorOfTrust } from "@govuk-one-login/data-vocab/credentials";
 
 Then<WorldDefinition>("the status code should be {int}", function (statusCode: number) {
   assert.ok(this.userIdentityPostResponse);
@@ -63,6 +64,15 @@ Then("the stored identity isValid field is {boolean}", function (isValid: boolea
 
 Then("the stored identity expired field is {boolean}", function (isExpired: boolean) {
   assert.equal(this.userIdentityPostResponse?.body?.expired, isExpired);
+});
+
+Then("the stored identity should have VOT {string}", function (vot: IdentityVectorOfTrust) {
+  assert.equal(this.userIdentityPostResponse?.body?.content.vot, vot);
+});
+
+Then("the stored identity should have max_vot", function () {
+  assert.ifError(this.userIdentityPostResponse?.body?.content.max_vot);
+  assert.ifError(this.userIdentityPostResponse?.body?.max_vot);
 });
 
 Then<WorldDefinition>("the untrusted stored identity should be returned", function () {

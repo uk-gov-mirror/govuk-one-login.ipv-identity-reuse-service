@@ -156,6 +156,7 @@ const createCredentialStoreIdentityResponse = async (
       state: "CURRENT",
       vc: await sign(defaultStoredIdentityHeader, storedIdentity),
       metadata: null,
+      unsignedVot: storedIdentity.max_vot || storedIdentity.vot,
     },
     vcs: await Promise.all(
       verifiableCredentialStates.map(async (vcState) => {

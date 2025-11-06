@@ -12,33 +12,26 @@ Given<WorldDefinition>("I have a user without a stored identity", async function
   this.bearerToken = await getBearerToken(this.userId);
 });
 
-Given<WorldDefinition>("the user has a stored identity, with VOT {string}", async function (vot: string) {
-  const header: JWTHeaderParameters = getDefaultJwtHeader("ES256", renderDid(this.testDidController, this.keyId));
+Given<WorldDefinition>(
+  "the user has a stored identity, with VOT {string}",
+  async function (vot: IdentityVectorOfTrust) {
+    await createStoredIdentityWithVot.call(this, vot);
+  }
+);
 
-  const allCredentialSignatures = this.credentialJwts.map((jwt) => jwt.split(".").at(-1));
+Given<WorldDefinition>(
+  "the user has a stored identity, with VOT {string} in the VC and stored with {string}",
+  async function (signedVot: IdentityVectorOfTrust, unsignedVot: IdentityVectorOfTrust) {
+    await createStoredIdentityWithVot.call(this, signedVot, unsignedVot);
+  }
+);
 
-  const payload: JWTPayload = {
-    sub: this.userId,
-    iss: "http://api.example.com",
-    credentials: allCredentialSignatures,
-    vot,
-  };
-  const jwt = await sign(header, payload, true);
-
-  const result = await evcsPostIdentity(
-    this,
-    this.userId,
-    {
-      vot: vot as never as IdentityVectorOfTrust,
-      jwt,
-    },
-    this.bearerToken || ""
-  );
-
-  assert.equal(result.status, 202);
-
-  this.bearerToken = await getBearerToken(this.userId);
-});
+Given<WorldDefinition>(
+  "the user has a stored identity, with VOT {string}, max_vox {string} in the VC and stored with {string}",
+  async function (signedVot: IdentityVectorOfTrust, maxVot: IdentityVectorOfTrust, unsignedVot: IdentityVectorOfTrust) {
+    await createStoredIdentityWithVot.call(this, signedVot, unsignedVot, maxVot);
+  }
+);
 
 Given<WorldDefinition>(
   "I have a user with a Stored Identity, with VOT {string} and {int} credentials",
@@ -156,3 +149,37 @@ When<WorldDefinition>("I make a request for the users identity without Authoriza
     govukSigninJourneyId: this.govukSigninJourneyId,
   });
 });
+
+async function createStoredIdentityWithVot(
+  this: WorldDefinition,
+  signedVot: IdentityVectorOfTrust,
+  unsignedVot?: IdentityVectorOfTrust,
+  maxVot?: IdentityVectorOfTrust
+) {
+  const header: JWTHeaderParameters = getDefaultJwtHeader("ES256", renderDid(this.testDidController, this.keyId));
+
+  const allCredentialSignatures = this.credentialJwts.map((jwt) => jwt.split(".").at(-1));
+
+  const payload: JWTPayload = {
+    sub: this.userId,
+    iss: "http://api.example.com",
+    credentials: allCredentialSignatures,
+    vot: signedVot,
+    ...(maxVot && { max_vot: maxVot }),
+  };
+  const jwt = await sign(header, payload, true);
+
+  const result = await evcsPostIdentity(
+    this,
+    this.userId,
+    {
+      vot: unsignedVot || signedVot,
+      jwt,
+    },
+    this.bearerToken || ""
+  );
+
+  assert.equal(result.status, 202);
+
+  this.bearerToken = await getBearerToken(this.userId);
+}
