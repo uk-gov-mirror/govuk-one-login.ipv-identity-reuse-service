@@ -19,8 +19,8 @@ import {
   handleGetIdentityFromCredentialStore,
   createErrorResponse,
   createAndLogErrorResponse,
-  validateIdentityRecords,
-} from "../../commons/validate-records.js";
+  validateStoredIdentity,
+} from "../../domain/stored-identity/stored-identity-validator.js";
 import { EVCSError } from "../../commons/errors.js";
 import { VotEnum } from "@govuk-one-login/event-catalogue/SIS_STORED_IDENTITY_READ.js";
 import { ResponseBody } from "@govuk-one-login/event-catalogue/SIS_STORED_IDENTITY_RETURNED.js";
@@ -82,7 +82,7 @@ const createSuccessResponse = async (
   const currentVcs: VerifiableCredentialJWT[] = parseCurrentVerifiableCredentials(identityResponse);
   const fraudVc = getFraudVc(currentVcs, configuration.fraudIssuer);
   const content = getJwtBody<StoredIdentityJWT>(identityResponse.si.vc);
-  const { kidValid, signatureValid, isValid } = await validateIdentityRecords(identityResponse);
+  const { kidValid, signatureValid, isValid } = await validateStoredIdentity(identityResponse);
   const vot: StoredIdentityVectorOfTrust = calculateVot(content, identityResponse.si.unsignedVot, vtr);
   const vtm = `https://oidc.account.gov.uk/trustmark`;
   const maxVot = (content.max_vot || identityResponse.si.unsignedVot) as VotEnum;

@@ -1,15 +1,15 @@
 import { describe, it, expect, vi, beforeEach, Mock } from "vitest";
-import * as configuration from "../configuration.js";
-import * as DidResolutionService from "../../api/did-resolution-api.js";
-import { publicKeyJwk, getDefaultJwtHeader } from "../../../shared-test/jwt-utilities.js";
+import * as configuration from "../../../commons/configuration.js";
+import * as DidResolutionService from "../../../api/did-resolution-api.js";
+import { publicKeyJwk, getDefaultJwtHeader } from "../../../../shared-test/jwt-utilities.js";
 import {
   createCredentialStoreIdentityResponse,
   createInvalidIdentityCheckCredentialJWT,
   createSignedIdentityCheckCredentialJWT,
-} from "../../../shared-test/evcs-api-utilities.js";
-import { validateCryptography, validateIdentityRecords } from "../validate-records.js";
-import { getJwtSignature } from "../jwt-utilities.js";
-import { EVCSIdentityResponse } from "../../api/evcs-api.js";
+} from "../../../../shared-test/evcs-api-utilities.js";
+import { validateCryptography, validateStoredIdentity } from "../stored-identity-validator.js";
+import { getJwtSignature } from "../../../commons/jwt-utilities.js";
+import { EVCSIdentityResponse } from "../../../api/evcs-api.js";
 
 const mockEVCSResponse = (response: EVCSIdentityResponse) => {
   (globalThis.fetch as Mock) = vi.fn().mockResolvedValue(
@@ -76,14 +76,14 @@ describe("validateCryptography", () => {
   });
 });
 
-describe("validateIdentityRecords", () => {
+describe("validateStoredIdentity", () => {
   it("isValid set to true when SI credentials match returned VC signatures", async () => {
     const { mockEVCSData } = await createCredentialStoreIdentityResponse([
       await createSignedIdentityCheckCredentialJWT(PASSPORT_ISSUER),
       await createSignedIdentityCheckCredentialJWT(FRAUD_ISSUER),
     ]);
 
-    const result = await validateIdentityRecords(mockEVCSData);
+    const result = await validateStoredIdentity(mockEVCSData);
     expect(result).toMatchObject({ kidValid: true, signatureValid: true, isValid: true });
     expect(result.storedIdentityJwt).toBeDefined();
   });
@@ -101,7 +101,7 @@ describe("validateIdentityRecords", () => {
       getDefaultJwtHeader(),
       credentialSignaturesMissingOne
     );
-    const result = await validateIdentityRecords(mockEVCSData);
+    const result = await validateStoredIdentity(mockEVCSData);
 
     expect(result).toMatchObject({ kidValid: true, signatureValid: true, isValid: false });
   });
@@ -121,7 +121,7 @@ describe("validateIdentityRecords", () => {
       credentialSignaturesExtraOne
     );
 
-    const result = await validateIdentityRecords(mockEVCSData);
+    const result = await validateStoredIdentity(mockEVCSData);
 
     expect(result).toMatchObject({ kidValid: true, signatureValid: true, isValid: false });
   });

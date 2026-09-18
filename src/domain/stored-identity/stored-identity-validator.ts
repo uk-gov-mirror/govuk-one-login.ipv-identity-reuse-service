@@ -1,16 +1,16 @@
-import { getConfiguration } from "./configuration.js";
-import * as didResolutionService from "../api/did-resolution-api.js";
+import { getConfiguration } from "../../commons/configuration.js";
+import * as didResolutionService from "../../api/did-resolution-api.js";
 import { jwtVerify } from "jose";
-import logger from "./logger.js";
-import { EVCSIdentityResponse, getIdentityFromEVCS } from "../api/evcs-api.js";
-import { getJwtBody, getJwtHeader } from "./jwt-utilities.js";
-import { HttpCodesEnum } from "./constants.js";
+import logger from "../../commons/logger.js";
+import { EVCSIdentityResponse, getIdentityFromEVCS } from "../../api/evcs-api.js";
+import { getJwtBody, getJwtHeader } from "../../commons/jwt-utilities.js";
+import { HttpCodesEnum } from "../../commons/constants.js";
 import { APIGatewayProxyResult } from "aws-lambda";
-import { EVCSError, StoredIdentityValidationError, TokenValidationError } from "./errors.js";
-import { UserIdentityErrorResponse } from "../handlers/post-phase2-user-identity-handler/post-phase2-user-identity-error-response.js";
-import { auditIdentityRecordRead, auditIdentityRecordReturned } from "./audit.js";
-import { StoredIdentityJWT, isStoredIdentityJWT } from "../domain/stored-identity/stored-identity-types.js";
-import { correlateCredentials } from "../domain/stored-identity/credential-correlator.js";
+import { EVCSError, StoredIdentityValidationError, TokenValidationError } from "../../commons/errors.js";
+import { UserIdentityErrorResponse } from "../../handlers/post-phase2-user-identity-handler/post-phase2-user-identity-error-response.js";
+import { auditIdentityRecordRead, auditIdentityRecordReturned } from "../../commons/audit.js";
+import { StoredIdentityJWT, isStoredIdentityJWT } from "./stored-identity-types.js";
+import { correlateCredentials } from "./credential-correlator.js";
 import { ErrorCodeEnum, ResponseBody } from "@govuk-one-login/event-catalogue/SIS_STORED_IDENTITY_RETURNED.js";
 
 export const getUserIdFromJwt = (authorizationToken: string): string => {
@@ -74,7 +74,7 @@ export type RecordValidationResult = {
   storedIdentityJwt: StoredIdentityJWT;
 };
 
-export const validateIdentityRecords = async (
+export const validateStoredIdentity = async (
   identityResponse: EVCSIdentityResponse
 ): Promise<RecordValidationResult> => {
   const content = getJwtBody<StoredIdentityJWT>(identityResponse.si.vc);

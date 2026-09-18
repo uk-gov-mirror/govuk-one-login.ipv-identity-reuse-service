@@ -4,7 +4,10 @@ import path from "node:path";
 import logger from "../../commons/logger.js";
 import mainPageTemplate from "./index.njk";
 import { getCookieValues } from "../../commons/cookie-utilities.js";
-import { handleGetIdentityFromCredentialStore, validateIdentityRecords } from "../../commons/validate-records.js";
+import {
+  handleGetIdentityFromCredentialStore,
+  validateStoredIdentity,
+} from "../../domain/stored-identity/stored-identity-validator.js";
 import { getSessionDetails } from "../../api/oauth-internal-api.js";
 import { redirectToErrorPage } from "../../api/sis-api.js";
 import { EVCSError, StoredIdentityValidationError } from "../../commons/errors.js";
@@ -55,7 +58,7 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
     }
 
     const identityResponse = await handleGetIdentityFromCredentialStore(`Bearer ${storageAccessToken}`, subject);
-    const { kidValid, signatureValid, isValid, storedIdentityJwt } = await validateIdentityRecords(identityResponse);
+    const { kidValid, signatureValid, isValid, storedIdentityJwt } = await validateStoredIdentity(identityResponse);
 
     if (!kidValid || !signatureValid || !isValid || !storedIdentityJwt) {
       logger.error("Record validation failed for existing user", { kidValid, signatureValid, isValid });

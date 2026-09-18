@@ -1,7 +1,10 @@
 import { afterEach, describe, expect, it, Mock, vi } from "vitest";
 import { lambdaHandler } from "../get-confirm-details-handler.js";
 import { APIGatewayProxyEvent } from "aws-lambda";
-import { handleGetIdentityFromCredentialStore, validateIdentityRecords } from "../../../commons/validate-records.js";
+import {
+  handleGetIdentityFromCredentialStore,
+  validateStoredIdentity,
+} from "../../../domain/stored-identity/stored-identity-validator.js";
 import { EVCSError, StoredIdentityValidationError } from "../../../commons/errors.js";
 import { HttpCodesEnum } from "../../../commons/constants.js";
 import { getSessionDetails } from "../../../api/oauth-internal-api.js";
@@ -18,9 +21,9 @@ vi.mock("nunjucks", () => ({
   },
 }));
 
-vi.mock("../../../commons/validate-records", () => ({
+vi.mock("../../../domain/stored-identity/stored-identity-validator", () => ({
   handleGetIdentityFromCredentialStore: vi.fn(),
-  validateIdentityRecords: vi.fn(),
+  validateStoredIdentity: vi.fn(),
 }));
 
 vi.mock("../user-details-content", () => ({
@@ -55,7 +58,7 @@ afterEach(() => {
 });
 
 it("should render the confirm details screen when all query string parameters are provided", async () => {
-  (validateIdentityRecords as Mock).mockResolvedValue({
+  (validateStoredIdentity as Mock).mockResolvedValue({
     kidValid: true,
     signatureValid: true,
     isValid: true,
@@ -128,7 +131,7 @@ it("should return an error when some required query string parameters are empty"
 
 describe("handler record validation", () => {
   it("renders confirm-details page when all records are valid and validated", async () => {
-    (validateIdentityRecords as Mock).mockResolvedValue({
+    (validateStoredIdentity as Mock).mockResolvedValue({
       kidValid: true,
       signatureValid: true,
       isValid: true,
@@ -150,7 +153,7 @@ describe("handler record validation", () => {
     { kidValid: false, signatureValid: false, isValid: true },
     { kidValid: false, signatureValid: true, isValid: false },
   ])("returns failure response when validation fails (%o)", async (verdict) => {
-    (validateIdentityRecords as Mock).mockResolvedValue(verdict);
+    (validateStoredIdentity as Mock).mockResolvedValue(verdict);
     const result = await lambdaHandler(validEvent());
     expect(result).toEqual({ statusCode: 500, body: "" });
   });
@@ -189,7 +192,7 @@ describe("handler record validation", () => {
       new EVCSError(HttpCodesEnum.INTERNAL_SERVER_ERROR, "user-id")
     );
     const result = await lambdaHandler(validEvent());
-    expect(validateIdentityRecords).not.toHaveBeenCalled();
+    expect(validateStoredIdentity).not.toHaveBeenCalled();
     expect(mockRender).not.toHaveBeenCalled();
     expect(result).toEqual({ statusCode: 500, body: "" });
   });
@@ -197,7 +200,7 @@ describe("handler record validation", () => {
   it("redirects to error page when EVCS returns a 404", async () => {
     (handleGetIdentityFromCredentialStore as Mock).mockRejectedValue(new EVCSError(HttpCodesEnum.NOT_FOUND, "user-id"));
     const result = await lambdaHandler(validEvent());
-    expect(validateIdentityRecords).not.toHaveBeenCalled();
+    expect(validateStoredIdentity).not.toHaveBeenCalled();
     expect(mockRender).not.toHaveBeenCalled();
     expect(result).toEqual({
       statusCode: 302,
@@ -215,7 +218,7 @@ describe("handler record validation", () => {
   });
 
   it("redirects to error page when stored identity JWT validation fails", async () => {
-    (validateIdentityRecords as Mock).mockRejectedValue(new StoredIdentityValidationError());
+    (validateStoredIdentity as Mock).mockRejectedValue(new StoredIdentityValidationError());
     const result = await lambdaHandler(validEvent());
     expect(mockRender).not.toHaveBeenCalled();
     expect(result).toEqual({
