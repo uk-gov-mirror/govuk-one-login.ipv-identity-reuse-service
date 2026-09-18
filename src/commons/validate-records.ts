@@ -10,7 +10,7 @@ import { EVCSError, StoredIdentityValidationError, TokenValidationError } from "
 import { UserIdentityErrorResponse } from "../handlers/post-phase2-user-identity-handler/post-phase2-user-identity-error-response.js";
 import { auditIdentityRecordRead, auditIdentityRecordReturned } from "./audit.js";
 import { StoredIdentityJWT, isStoredIdentityJWT } from "../domain/stored-identity/stored-identity-types.js";
-import { validateStoredIdentityCredentials } from "../identity-reuse/stored-identity-validator.js";
+import { correlateCredentials } from "../domain/stored-identity/credential-correlator.js";
 import { ErrorCodeEnum, ResponseBody } from "@govuk-one-login/event-catalogue/SIS_STORED_IDENTITY_RETURNED.js";
 
 export const getUserIdFromJwt = (authorizationToken: string): string => {
@@ -88,7 +88,7 @@ export const validateIdentityRecords = async (
   const currentVcsEncoded = identityResponse.vcs.map((vc) => vc.vc);
 
   const { kidValid, signatureValid } = await validateCryptography(kid, identityResponse);
-  const isValid = validateStoredIdentityCredentials(content, currentVcsEncoded);
+  const isValid = correlateCredentials(content, currentVcsEncoded);
 
   return { kidValid, signatureValid, isValid, storedIdentityJwt: content };
 };

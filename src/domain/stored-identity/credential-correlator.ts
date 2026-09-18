@@ -1,8 +1,8 @@
-import { getJwtSignature } from "../commons/jwt-utilities.js";
-import logger from "../commons/logger.js";
-import { StoredIdentityJWT } from "../domain/stored-identity/stored-identity-types.js";
+import { getJwtSignature } from "../../commons/jwt-utilities.js";
+import logger from "../../commons/logger.js";
+import { StoredIdentityJWT } from "./stored-identity-types.js";
 
-export const validateStoredIdentityCredentials = (
+export const correlateCredentials = (
   storedIdentityRecord: StoredIdentityJWT,
   encodedCredentialJwts: string[]
 ): boolean => {
