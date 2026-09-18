@@ -6,7 +6,7 @@ import { getDefaultJwtHeader, sign } from "../../../../shared-test/jwt-utilities
 import * as AuditModule from "../../../commons/audit.js";
 import type { Configuration } from "../../../commons/configuration.js";
 import * as ConfigurationModule from "../../../commons/configuration.js";
-import { StoredIdentityJWT } from "../../../handlers/post-phase2-user-identity-handler/stored-identity-jwt.js";
+import { StoredIdentityJWT } from "../../../domain/stored-identity/stored-identity-types.js";
 import * as FraudCheckService from "../../../identity-reuse/fraud-check-service.js";
 import type { VerifiableCredentialJWT } from "../../../identity-reuse/verifiable-credential-jwt.js";
 import { createServer as createProviderServer } from "./sis-provider-app.js";

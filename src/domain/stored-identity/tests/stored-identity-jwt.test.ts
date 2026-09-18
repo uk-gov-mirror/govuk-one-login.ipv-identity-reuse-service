@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { isStoredIdentityJWT } from "../stored-identity-jwt.js";
+import { isStoredIdentityJWT } from "../stored-identity-types.js";
 
 const validJwt = () => ({
   sub: "user-sub",

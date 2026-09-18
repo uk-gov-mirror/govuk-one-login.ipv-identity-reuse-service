@@ -9,10 +9,7 @@ import { APIGatewayProxyResult } from "aws-lambda";
 import { EVCSError, StoredIdentityValidationError, TokenValidationError } from "./errors.js";
 import { UserIdentityErrorResponse } from "../handlers/post-phase2-user-identity-handler/post-phase2-user-identity-error-response.js";
 import { auditIdentityRecordRead, auditIdentityRecordReturned } from "./audit.js";
-import {
-  StoredIdentityJWT,
-  isStoredIdentityJWT,
-} from "../handlers/post-phase2-user-identity-handler/stored-identity-jwt.js";
+import { StoredIdentityJWT, isStoredIdentityJWT } from "../domain/stored-identity/stored-identity-types.js";
 import { validateStoredIdentityCredentials } from "../identity-reuse/stored-identity-validator.js";
 import { ErrorCodeEnum, ResponseBody } from "@govuk-one-login/event-catalogue/SIS_STORED_IDENTITY_RETURNED.js";
 

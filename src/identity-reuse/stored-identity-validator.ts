@@ -1,6 +1,6 @@
-import { StoredIdentityJWT } from "../handlers/post-phase2-user-identity-handler/stored-identity-jwt.js";
 import { getJwtSignature } from "../commons/jwt-utilities.js";
 import logger from "../commons/logger.js";
+import { StoredIdentityJWT } from "../domain/stored-identity/stored-identity-types.js";
 
 export const validateStoredIdentityCredentials = (
   storedIdentityRecord: StoredIdentityJWT,

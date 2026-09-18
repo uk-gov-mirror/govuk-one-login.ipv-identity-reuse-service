@@ -11,7 +11,7 @@ import { getFraudVc } from "../../identity-reuse/fraud-check-service.js";
 import { hasIdentityExpired } from "../../identity-reuse/identity-expiry-service.js";
 import { VerifiableCredentialJWT } from "../../identity-reuse/verifiable-credential-jwt.js";
 import { UserIdentityRequest } from "./post-phase2-user-identity-request.js";
-import { StoredIdentityJWT } from "./stored-identity-jwt.js";
+import { StoredIdentityJWT } from "../../domain/stored-identity/stored-identity-types.js";
 import { StoredIdentityVectorOfTrust, UserIdentityResponse } from "./post-phase2-user-identity-response.js";
 import { getProperty } from "../../commons/case-insensitive-header-utilities.js";
 import {
