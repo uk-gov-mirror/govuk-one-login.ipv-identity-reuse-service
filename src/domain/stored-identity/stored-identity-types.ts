@@ -5,10 +5,12 @@ import {
   PostalAddressClass,
 } from "@govuk-one-login/data-vocab/credentials.js";
 
-export interface StoredIdentityClaims {
-  "https://vocab.account.gov.uk/v1/coreIdentity": PersonWithIdentityClass;
-  "https://vocab.account.gov.uk/v1/address": PostalAddressClass[];
-}
+export type StoredIdentityValidationResult = {
+  kidValid: boolean;
+  signatureValid: boolean;
+  isValid: boolean;
+  storedIdentityJwt: StoredIdentityJWT;
+};
 
 export interface StoredIdentityJWT<VotT extends string = IdentityVectorOfTrust> extends JWTClass {
   sub: string;
@@ -17,6 +19,11 @@ export interface StoredIdentityJWT<VotT extends string = IdentityVectorOfTrust> 
   max_vot?: IdentityVectorOfTrust;
   vtm: string;
   claims: StoredIdentityClaims;
+}
+
+export interface StoredIdentityClaims {
+  "https://vocab.account.gov.uk/v1/coreIdentity": PersonWithIdentityClass;
+  "https://vocab.account.gov.uk/v1/address": PostalAddressClass[];
 }
 
 export type StoredIdentityVectorOfTrust = IdentityVectorOfTrust | "P0";

@@ -9,7 +9,7 @@ import { APIGatewayProxyResult } from "aws-lambda";
 import { EVCSError, StoredIdentityValidationError, TokenValidationError } from "../../commons/errors.js";
 import { UserIdentityErrorResponse } from "../../handlers/post-phase2-user-identity-handler/post-phase2-user-identity-error-response.js";
 import { auditIdentityRecordRead, auditIdentityRecordReturned } from "../../commons/audit.js";
-import { StoredIdentityJWT, isStoredIdentityJWT } from "./stored-identity-types.js";
+import { StoredIdentityJWT, isStoredIdentityJWT, StoredIdentityValidationResult } from "./stored-identity-types.js";
 import { correlateCredentials } from "./credential-correlator.js";
 import { ErrorCodeEnum, ResponseBody } from "@govuk-one-login/event-catalogue/SIS_STORED_IDENTITY_RETURNED.js";
 
@@ -67,16 +67,9 @@ const verifySignature = async (kid: string, jwt: string): Promise<boolean> => {
   return true;
 };
 
-export type RecordValidationResult = {
-  kidValid: boolean;
-  signatureValid: boolean;
-  isValid: boolean;
-  storedIdentityJwt: StoredIdentityJWT;
-};
-
 export const validateStoredIdentity = async (
   identityResponse: EVCSIdentityResponse
-): Promise<RecordValidationResult> => {
+): Promise<StoredIdentityValidationResult> => {
   const content = getJwtBody<StoredIdentityJWT>(identityResponse.si.vc);
 
   if (!isStoredIdentityJWT(content)) {
