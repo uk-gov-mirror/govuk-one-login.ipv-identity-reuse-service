@@ -19,6 +19,8 @@ export interface StoredIdentityJWT<VotT extends string = IdentityVectorOfTrust> 
   claims: StoredIdentityClaims;
 }
 
+export type StoredIdentityVectorOfTrust = IdentityVectorOfTrust | "P0";
+
 export const isStoredIdentityJWT = (value: unknown): value is StoredIdentityJWT => {
   if (typeof value !== "object" || value === null) return false;
 

@@ -6,13 +6,13 @@ import { HttpCodesEnum } from "../../commons/constants.js";
 import { getJwtBody } from "../../commons/jwt-utilities.js";
 import logger from "../../commons/logger.js";
 import { EVCSIdentityResponse, parseCurrentVerifiableCredentials } from "../../api/evcs-api.js";
-import { calculateVot } from "../../identity-reuse/calculate-vot.js";
+import { calculateVot } from "../../domain/stored-identity/calculate-vot.js";
 import { getFraudVc } from "../../identity-reuse/fraud-check-service.js";
 import { hasIdentityExpired } from "../../identity-reuse/identity-expiry-service.js";
 import { VerifiableCredentialJWT } from "../../identity-reuse/verifiable-credential-jwt.js";
 import { UserIdentityRequest } from "./post-phase2-user-identity-request.js";
-import { StoredIdentityJWT } from "../../domain/stored-identity/stored-identity-types.js";
-import { StoredIdentityVectorOfTrust, UserIdentityResponse } from "./post-phase2-user-identity-response.js";
+import { StoredIdentityJWT, StoredIdentityVectorOfTrust } from "../../domain/stored-identity/stored-identity-types.js";
+import { UserIdentityResponse } from "./post-phase2-user-identity-response.js";
 import { getProperty } from "../../commons/case-insensitive-header-utilities.js";
 import {
   getUserIdFromJwt,
