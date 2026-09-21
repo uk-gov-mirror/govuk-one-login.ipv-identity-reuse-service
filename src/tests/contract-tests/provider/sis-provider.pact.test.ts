@@ -11,7 +11,7 @@ import * as FraudCheckService from "../../../identity-reuse/fraud-check-service.
 import type { VerifiableCredentialJWT } from "../../../identity-reuse/verifiable-credential-jwt.js";
 import { createServer as createProviderServer } from "./sis-provider-app.js";
 import { vi, describe, it, beforeAll, beforeEach, afterAll, expect } from "vitest";
-import { CredentialStoreErrorResponse, CredentialStoreIdentityResponse } from "../../../api/evcs-api.js";
+import { EVCSErrorResponse, EVCSIdentityResponse } from "../../../api/evcs-api.js";
 
 vi.mock("../../../commons/audit");
 
@@ -45,10 +45,7 @@ const validateEnvironment = () => {
   }
 };
 
-const mockEVCSResponse = (
-  response: CredentialStoreIdentityResponse | CredentialStoreErrorResponse,
-  status: number = 200
-) => {
+const mockEVCSResponse = (response: EVCSIdentityResponse | EVCSErrorResponse, status: number = 200) => {
   vi.spyOn(globalThis, "fetch").mockResolvedValue(
     Response.json(response, {
       status,
@@ -82,7 +79,7 @@ describe("Sis Pact Verification", () => {
   it("validates expectations of Stored Identity Service", async () => {
     const environmentType = (process.env.PACT_TYPE || "file").toLowerCase();
 
-    let mockEVCSData: CredentialStoreIdentityResponse;
+    let mockEVCSData: EVCSIdentityResponse;
 
     const options: VerifierOptions = {
       provider: "SisProvider",
@@ -143,7 +140,7 @@ describe("Sis Pact Verification", () => {
 
 const createCredentialStoreIdentityResponse = async (
   verifiableCredentialStates: { vc: VerifiableCredentialJWT; state: string }[] = []
-): Promise<CredentialStoreIdentityResponse> => {
+): Promise<EVCSIdentityResponse> => {
   const storedIdentity: StoredIdentityJWT = {
     sub: "user-sub",
     vot: "P2",

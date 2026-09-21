@@ -2,11 +2,11 @@ import { getConfiguration } from "./configuration.js";
 import * as didResolutionService from "../api/did-resolution-api.js";
 import { jwtVerify } from "jose";
 import logger from "./logger.js";
-import { CredentialStoreIdentityResponse, getIdentityFromCredentialStore } from "../api/evcs-api.js";
+import { EVCSIdentityResponse, getIdentityFromEVCS } from "../api/evcs-api.js";
 import { getJwtBody, getJwtHeader } from "./jwt-utilities.js";
 import { HttpCodesEnum } from "./constants.js";
 import { APIGatewayProxyResult } from "aws-lambda";
-import { CredentialStoreError, StoredIdentityValidationError, TokenValidationError } from "./errors.js";
+import { EVCSError, StoredIdentityValidationError, TokenValidationError } from "./errors.js";
 import { UserIdentityErrorResponse } from "../handlers/post-phase2-user-identity-handler/post-phase2-user-identity-error-response.js";
 import { auditIdentityRecordRead, auditIdentityRecordReturned } from "./audit.js";
 import {
@@ -35,11 +35,11 @@ export const handleGetIdentityFromCredentialStore = async (
   authorizationToken: string,
   userId: string,
   journeyId?: string
-): Promise<CredentialStoreIdentityResponse> => {
-  const result = await getIdentityFromCredentialStore(authorizationToken);
+): Promise<EVCSIdentityResponse> => {
+  const result = await getIdentityFromEVCS(authorizationToken);
   if (!result.ok) {
     logger.error("Error received from EVCS", { status: result.status });
-    throw new CredentialStoreError(result.status, userId, journeyId);
+    throw new EVCSError(result.status, userId, journeyId);
   }
 
   return await result.json();
@@ -47,7 +47,7 @@ export const handleGetIdentityFromCredentialStore = async (
 
 export const validateCryptography = async (
   kid: string,
-  identityResponse: CredentialStoreIdentityResponse
+  identityResponse: EVCSIdentityResponse
 ): Promise<{ kidValid: boolean; signatureValid: boolean }> => {
   const configuration = await getConfiguration();
   const controller = didResolutionService.getDidWebController(kid);
@@ -78,7 +78,7 @@ export type RecordValidationResult = {
 };
 
 export const validateIdentityRecords = async (
-  identityResponse: CredentialStoreIdentityResponse
+  identityResponse: EVCSIdentityResponse
 ): Promise<RecordValidationResult> => {
   const content = getJwtBody<StoredIdentityJWT>(identityResponse.si.vc);
 

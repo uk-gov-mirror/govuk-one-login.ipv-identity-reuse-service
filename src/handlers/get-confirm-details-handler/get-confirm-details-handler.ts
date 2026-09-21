@@ -7,7 +7,7 @@ import { getCookieValues } from "../../commons/cookie-utilities.js";
 import { handleGetIdentityFromCredentialStore, validateIdentityRecords } from "../../commons/validate-records.js";
 import { getSessionDetails } from "../../api/oauth-internal-api.js";
 import { redirectToErrorPage } from "../../api/sis-api.js";
-import { CredentialStoreError, StoredIdentityValidationError } from "../../commons/errors.js";
+import { EVCSError, StoredIdentityValidationError } from "../../commons/errors.js";
 import { HttpCodesEnum } from "../../commons/constants.js";
 import { extractUserDetails } from "./user-details-content.js";
 import translations from "../../../locales/en/translation.json" with { type: "json" };
@@ -84,7 +84,7 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
       },
     };
   } catch (error) {
-    if (error instanceof CredentialStoreError && error.statusCode === HttpCodesEnum.NOT_FOUND) {
+    if (error instanceof EVCSError && error.statusCode === HttpCodesEnum.NOT_FOUND) {
       logger.error("No identity record found in EVCS");
       return redirectToErrorPage(domainName);
     }

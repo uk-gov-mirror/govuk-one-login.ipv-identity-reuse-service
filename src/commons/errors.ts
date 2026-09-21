@@ -14,14 +14,14 @@ export class TokenValidationError extends Error {
   }
 }
 
-export class CredentialStoreError extends Error {
+export class EVCSError extends Error {
   constructor(
     public readonly statusCode: HttpCodesEnum,
     public readonly userId: string,
     public readonly journeyId?: string
   ) {
-    super("Credential store request failed");
-    this.name = "CredentialStoreError";
+    super("EVCS request failed");
+    this.name = "EVCSError";
   }
 }
 

@@ -1,15 +1,11 @@
 import { IdentityCheckCredentialJWTClass } from "@govuk-one-login/data-vocab/credentials.js";
 import { getDefaultJwtHeader, sign } from "../../../shared-test/jwt-utilities.js";
-import {
-  CredentialStoreIdentityResponse,
-  parseCurrentVerifiableCredentials,
-  VerifiableCredentialObject,
-} from "../evcs-api.js";
+import { EVCSIdentityResponse, parseCurrentVerifiableCredentials, VerifiableCredentialObject } from "../evcs-api.js";
 import { describe, it, expect } from "vitest";
 
 describe("parseCurrentVerifiableCredentials", () => {
   it("should return verifiable credentials with CURRENT state only", async () => {
-    const identityResponse: CredentialStoreIdentityResponse = {
+    const identityResponse: EVCSIdentityResponse = {
       si: {
         vc: "jwtString",
         metadata: undefined,

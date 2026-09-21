@@ -1,6 +1,6 @@
 import { JWTHeaderParameters } from "jose";
 import { getDefaultJwtHeader, sign } from "./jwt-utilities.js";
-import { CredentialStoreIdentityResponse } from "../src/api/evcs-api.js";
+import { EVCSIdentityResponse } from "../src/api/evcs-api.js";
 
 const CURRENT = "CURRENT";
 
@@ -38,7 +38,7 @@ export const createCredentialStoreIdentityResponseWithStates = async (
   credentialsAndStates: { signedVc: string; state: string }[],
   header: JWTHeaderParameters = getDefaultJwtHeader(),
   forcedCredentialSignatures?: string[]
-): Promise<{ mockEVCSData: CredentialStoreIdentityResponse; credentialSignatures: string[] }> => {
+): Promise<{ mockEVCSData: EVCSIdentityResponse; credentialSignatures: string[] }> => {
   const vcs = credentialsAndStates.map((c) => ({ state: c.state, vc: c.signedVc, metadata: undefined }));
   const credentialSignatures =
     forcedCredentialSignatures ?? credentialsAndStates.map((c) => c.signedVc.split(".").at(2)!);

@@ -9,7 +9,7 @@ import { getConfiguration, type Configuration } from "../../commons/configuratio
 import { isStringWithLength } from "../../commons/string-utilities.js";
 import logger from "../../commons/logger.js";
 import { auditIdentityRecordInvalidated } from "../../commons/audit.js";
-import { invalidateIdentityInCredentialStore, isCredentialStoreErrorResponse } from "../../api/evcs-api.js";
+import { invalidateIdentityInEVCS, isEVCSErrorResponse } from "../../api/evcs-api.js";
 
 const metrics = new Metrics();
 
@@ -37,7 +37,7 @@ export const handler = async (event: SQSEvent): Promise<void> => {
 
 const invalidateUser = async (userId: string, interventionCode: InterventionCodeEnum) => {
   try {
-    const response = await invalidateIdentityInCredentialStore(userId);
+    const response = await invalidateIdentityInEVCS(userId);
 
     if (response.ok) {
       logger.info(`Successfully invalidated user identity`);
@@ -48,7 +48,7 @@ const invalidateUser = async (userId: string, interventionCode: InterventionCode
       await auditIdentityRecordInvalidated(userId, interventionCode);
     } else {
       const responseBody = await response.json();
-      if (isCredentialStoreErrorResponse(responseBody) && response.status === 404) {
+      if (isEVCSErrorResponse(responseBody) && response.status === 404) {
         metrics.addMetric(MetricName.IdentityDoesNotExist, MetricUnit.Count, 1);
       } else {
         logger.error("Error calling service to invalid user", {

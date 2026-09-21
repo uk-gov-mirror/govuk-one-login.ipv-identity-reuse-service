@@ -9,9 +9,9 @@ import {
 } from "../../../shared-test/evcs-api-utilities.js";
 import { validateCryptography, validateIdentityRecords } from "../validate-records.js";
 import { getJwtSignature } from "../jwt-utilities.js";
-import { CredentialStoreIdentityResponse } from "../../api/evcs-api.js";
+import { EVCSIdentityResponse } from "../../api/evcs-api.js";
 
-const mockEVCSResponse = (response: CredentialStoreIdentityResponse) => {
+const mockEVCSResponse = (response: EVCSIdentityResponse) => {
   (globalThis.fetch as Mock) = vi.fn().mockResolvedValue(
     Response.json(response, {
       status: 200,
