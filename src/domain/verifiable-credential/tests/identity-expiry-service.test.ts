@@ -2,7 +2,7 @@ import { hasIdentityExpired } from "../identity-expiry-service.js";
 import { Configuration } from "../../../commons/configuration.js";
 import * as fraudCheckService from "../fraud-check-service.js";
 import * as drivingLicenceExpiryService from "../driving-licence-expiry-service.js";
-import { VerifiableCredentialJWT } from "../verifiable-credential-jwt.js";
+import { VerifiableCredentialJWT } from "../verifiable-credential-types.js";
 import { vi, describe, it, beforeEach, expect } from "vitest";
 
 vi.mock("../../../commons/logger");

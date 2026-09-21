@@ -1,4 +1,4 @@
-import { isIdentityCheckCredential } from "../verifiable-credential-jwt.js";
+import { isIdentityCheckCredential } from "../verifiable-credential-types.js";
 import { IdentityCheckCredentialJWTClass } from "@govuk-one-login/data-vocab/credentials.js";
 import { describe, it, expect } from "vitest";
 

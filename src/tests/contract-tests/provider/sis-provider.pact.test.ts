@@ -8,7 +8,7 @@ import type { Configuration } from "../../../commons/configuration.js";
 import * as ConfigurationModule from "../../../commons/configuration.js";
 import { StoredIdentityJWT } from "../../../domain/stored-identity/stored-identity-types.js";
 import * as FraudCheckService from "../../../domain/verifiable-credential/fraud-check-service.js";
-import type { VerifiableCredentialJWT } from "../../../domain/verifiable-credential/verifiable-credential-jwt.js";
+import type { VerifiableCredentialJWT } from "../../../domain/verifiable-credential/verifiable-credential-types.js";
 import { createServer as createProviderServer } from "./sis-provider-app.js";
 import { vi, describe, it, beforeAll, beforeEach, afterAll, expect } from "vitest";
 import { EVCSErrorResponse, EVCSIdentityResponse } from "../../../api/evcs-api.js";

@@ -1,7 +1,7 @@
 import logger from "../../commons/logger.js";
 import { hasNbfExpired, normaliseToStartOfDay } from "../../commons/date-utilities.js";
 import { IdentityCheckCredentialJWTClass } from "@govuk-one-login/data-vocab/credentials.js";
-import { VerifiableCredentialJWT, isIdentityCheckCredential } from "./verifiable-credential-jwt.js";
+import { VerifiableCredentialJWT, isIdentityCheckCredential } from "./verifiable-credential-types.js";
 
 export const hasDrivingPermit = (vc: IdentityCheckCredentialJWTClass): boolean => {
   const drivingPermits = vc.vc?.credentialSubject?.drivingPermit;

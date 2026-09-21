@@ -6,7 +6,7 @@ import {
   hasDrivingLicenceExpired,
 } from "../driving-licence-expiry-service.js";
 import { IdentityCheckCredentialJWTClass } from "@govuk-one-login/data-vocab/credentials.js";
-import { VerifiableCredentialJWT } from "../verifiable-credential-jwt.js";
+import { VerifiableCredentialJWT } from "../verifiable-credential-types.js";
 import logger from "../../../commons/logger.js";
 import { vi, describe, it, beforeEach, afterEach, expect } from "vitest";
 
