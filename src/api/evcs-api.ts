@@ -1,5 +1,5 @@
 import { getConfiguration, getServiceApiKey } from "../commons/configuration.js";
-import { VerifiableCredentialJWT } from "../identity-reuse/verifiable-credential-jwt.js";
+import { VerifiableCredentialJWT } from "../domain/verifiable-credential/verifiable-credential-jwt.js";
 import { getJwtBody } from "../commons/jwt-utilities.js";
 import logger from "../commons/logger.js";
 import { IdentityVectorOfTrust } from "@govuk-one-login/data-vocab/credentials.js";

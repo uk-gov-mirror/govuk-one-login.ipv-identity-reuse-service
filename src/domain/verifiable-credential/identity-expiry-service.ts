@@ -1,4 +1,4 @@
-import { Configuration } from "../commons/configuration.js";
+import { Configuration } from "../../commons/configuration.js";
 import { hasDrivingLicenceExpired } from "./driving-licence-expiry-service.js";
 import { hasFraudCheckExpired, getFraudVc } from "./fraud-check-service.js";
 import { VerifiableCredentialJWT } from "./verifiable-credential-jwt.js";

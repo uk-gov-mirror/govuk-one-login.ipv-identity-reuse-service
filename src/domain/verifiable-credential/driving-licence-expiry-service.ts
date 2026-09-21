@@ -1,5 +1,5 @@
-import logger from "../commons/logger.js";
-import { hasNbfExpired, normaliseToStartOfDay } from "../commons/date-utilities.js";
+import logger from "../../commons/logger.js";
+import { hasNbfExpired, normaliseToStartOfDay } from "../../commons/date-utilities.js";
 import { IdentityCheckCredentialJWTClass } from "@govuk-one-login/data-vocab/credentials.js";
 import { VerifiableCredentialJWT, isIdentityCheckCredential } from "./verifiable-credential-jwt.js";
 

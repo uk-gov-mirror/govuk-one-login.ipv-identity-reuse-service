@@ -5,7 +5,7 @@ import * as configuration from "../../../commons/configuration.js";
 import { Configuration } from "../../../commons/configuration.js";
 import { UserIdentityResponse } from "../post-phase2-user-identity-response.js";
 import { UserIdentityRequest } from "../post-phase2-user-identity-request.js";
-import * as identityExpiryService from "../../../identity-reuse/identity-expiry-service.js";
+import * as identityExpiryService from "../../../domain/verifiable-credential/identity-expiry-service.js";
 
 import * as AuditModule from "../../../commons/audit.js";
 import * as ValidateStoredIdentity from "../../../domain/stored-identity/stored-identity-validator.js";

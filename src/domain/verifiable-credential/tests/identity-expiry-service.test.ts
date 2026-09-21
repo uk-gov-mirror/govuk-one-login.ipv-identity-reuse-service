@@ -1,11 +1,11 @@
 import { hasIdentityExpired } from "../identity-expiry-service.js";
-import { Configuration } from "../../commons/configuration.js";
+import { Configuration } from "../../../commons/configuration.js";
 import * as fraudCheckService from "../fraud-check-service.js";
 import * as drivingLicenceExpiryService from "../driving-licence-expiry-service.js";
 import { VerifiableCredentialJWT } from "../verifiable-credential-jwt.js";
 import { vi, describe, it, beforeEach, expect } from "vitest";
 
-vi.mock("../../commons/logger");
+vi.mock("../../../commons/logger");
 
 const FRAUD_ISSUER = ["fraudCRI"];
 const DCMAW_ISSUER = ["https://www.review-b.dev.account.gov.uk"];

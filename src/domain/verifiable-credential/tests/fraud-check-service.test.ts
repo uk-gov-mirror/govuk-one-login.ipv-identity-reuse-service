@@ -6,8 +6,8 @@ import {
   RiskAssessmentCredentialJWTClass,
   SecurityCheckCredentialJWTClass,
 } from "@govuk-one-login/data-vocab/credentials.js";
-import * as configuration from "../../commons/configuration.js";
-import { Configuration } from "../../commons/configuration.js";
+import * as configuration from "../../../commons/configuration.js";
+import { Configuration } from "../../../commons/configuration.js";
 import { vi, describe, it, beforeEach, expect } from "vitest";
 
 const mockSuccessfulEvidence: IdentityCheckClass = {
@@ -21,7 +21,7 @@ const mockSuccessfulEvidence: IdentityCheckClass = {
 const VALIDITY_PERIOD = 180;
 const FRAUD_ISSUERS = ["fraudCRI"];
 
-vi.mock("../../commons/logger");
+vi.mock("../../../commons/logger");
 
 describe("hasFraudCheckExpired", () => {
   beforeEach(() => {
