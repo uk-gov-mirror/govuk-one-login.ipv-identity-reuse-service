@@ -6,7 +6,7 @@ import { getDefaultJwtHeader, sign } from "../../../../shared-test/jwt-utilities
 import * as AuditModule from "../../../commons/audit.js";
 import type { Configuration } from "../../../commons/configuration.js";
 import * as ConfigurationModule from "../../../commons/configuration.js";
-import { StoredIdentityJWT } from "../../../domain/stored-identity/stored-identity-types.js";
+import { StoredIdentityRecord } from "../../../domain/stored-identity/stored-identity-types.js";
 import * as FraudCheckService from "../../../domain/verifiable-credential/fraud-check-service.js";
 import type { VerifiableCredentialJWT } from "../../../domain/verifiable-credential/verifiable-credential-types.js";
 import { createServer as createProviderServer } from "./sis-provider-app.js";
@@ -141,7 +141,7 @@ describe("Sis Pact Verification", () => {
 const createCredentialStoreIdentityResponse = async (
   verifiableCredentialStates: { vc: VerifiableCredentialJWT; state: string }[] = []
 ): Promise<EVCSIdentityResponse> => {
-  const storedIdentity: StoredIdentityJWT = {
+  const storedIdentity: StoredIdentityRecord = {
     sub: "user-sub",
     vot: "P2",
     iss: "http://api.example.com",

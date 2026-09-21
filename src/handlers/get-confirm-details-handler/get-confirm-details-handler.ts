@@ -58,16 +58,16 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
     }
 
     const identityResponse = await handleGetIdentityFromCredentialStore(`Bearer ${storageAccessToken}`, subject);
-    const { kidValid, signatureValid, isValid, storedIdentityJwt } = await validateStoredIdentity(identityResponse);
+    const { kidValid, signatureValid, isValid, storedIdentityRecord } = await validateStoredIdentity(identityResponse);
 
-    if (!kidValid || !signatureValid || !isValid || !storedIdentityJwt) {
+    if (!kidValid || !signatureValid || !isValid || !storedIdentityRecord) {
       logger.error("Record validation failed for existing user", { kidValid, signatureValid, isValid });
       return {
         statusCode: 500,
         body: "",
       };
     }
-    const userDetails = extractUserDetails(storedIdentityJwt);
+    const userDetails = extractUserDetails(storedIdentityRecord);
 
     return {
       statusCode: 200,

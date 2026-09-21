@@ -11,7 +11,10 @@ import { getFraudVc } from "../../domain/verifiable-credential/fraud-check-servi
 import { hasIdentityExpired } from "../../domain/verifiable-credential/identity-expiry-service.js";
 import { VerifiableCredentialJWT } from "../../domain/verifiable-credential/verifiable-credential-types.js";
 import { UserIdentityRequest } from "./post-phase2-user-identity-request.js";
-import { StoredIdentityJWT, StoredIdentityVectorOfTrust } from "../../domain/stored-identity/stored-identity-types.js";
+import {
+  StoredIdentityRecord,
+  StoredIdentityVectorOfTrust,
+} from "../../domain/stored-identity/stored-identity-types.js";
 import { UserIdentityResponse } from "./post-phase2-user-identity-response.js";
 import { getProperty } from "../../commons/case-insensitive-header-utilities.js";
 import {
@@ -81,7 +84,7 @@ const createSuccessResponse = async (
   const configuration = await getConfiguration();
   const currentVcs: VerifiableCredentialJWT[] = parseCurrentVerifiableCredentials(identityResponse);
   const fraudVc = getFraudVc(currentVcs, configuration.fraudIssuer);
-  const content = getJwtBody<StoredIdentityJWT>(identityResponse.si.vc);
+  const content = getJwtBody<StoredIdentityRecord>(identityResponse.si.vc);
   const { kidValid, signatureValid, isValid } = await validateStoredIdentity(identityResponse);
   const vot: StoredIdentityVectorOfTrust = calculateVot(content, identityResponse.si.unsignedVot, vtr);
   const vtm = `https://oidc.account.gov.uk/trustmark`;

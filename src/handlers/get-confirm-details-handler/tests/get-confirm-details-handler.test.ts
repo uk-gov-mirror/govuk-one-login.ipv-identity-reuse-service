@@ -62,7 +62,7 @@ it("should render the confirm details screen when all query string parameters ar
     kidValid: true,
     signatureValid: true,
     isValid: true,
-    storedIdentityJwt: {
+    storedIdentityRecord: {
       sub: "user-sub",
       credentials: [],
       vot: "P2",
@@ -135,7 +135,7 @@ describe("handler record validation", () => {
       kidValid: true,
       signatureValid: true,
       isValid: true,
-      storedIdentityJwt: {
+      storedIdentityRecord: {
         sub: "user-sub",
         credentials: [],
         vot: "P2",

@@ -85,7 +85,7 @@ describe("validateStoredIdentity", () => {
 
     const result = await validateStoredIdentity(mockEVCSData);
     expect(result).toMatchObject({ kidValid: true, signatureValid: true, isValid: true });
-    expect(result.storedIdentityJwt).toBeDefined();
+    expect(result.storedIdentityRecord).toBeDefined();
   });
 
   it("isValid is false when a stored identity record is missing a signature", async () => {

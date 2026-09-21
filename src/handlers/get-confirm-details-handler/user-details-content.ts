@@ -1,5 +1,5 @@
 import { PostalAddressClass } from "@govuk-one-login/data-vocab/credentials.js";
-import { StoredIdentityJWT } from "../../domain/stored-identity/stored-identity-types.js";
+import { StoredIdentityRecord } from "../../domain/stored-identity/stored-identity-types.js";
 import { StoredIdentityValidationError } from "../../commons/errors.js";
 
 export interface UserDetailsContent {
@@ -8,9 +8,9 @@ export interface UserDetailsContent {
   addressDetailHtml: string;
 }
 
-export const extractUserDetails = (storedIdentityJwt: StoredIdentityJWT): UserDetailsContent => {
-  const coreIdentity = storedIdentityJwt.claims["https://vocab.account.gov.uk/v1/coreIdentity"];
-  const addressClaim = storedIdentityJwt.claims["https://vocab.account.gov.uk/v1/address"] ?? [];
+export const extractUserDetails = (storedIdentityRecord: StoredIdentityRecord): UserDetailsContent => {
+  const coreIdentity = storedIdentityRecord.claims["https://vocab.account.gov.uk/v1/coreIdentity"];
+  const addressClaim = storedIdentityRecord.claims["https://vocab.account.gov.uk/v1/address"] ?? [];
 
   const name = buildFullName(coreIdentity?.name);
   const dateOfBirth = coreIdentity?.birthDate?.[0]?.value;

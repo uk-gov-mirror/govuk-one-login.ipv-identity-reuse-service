@@ -1,6 +1,6 @@
 import { IdentityVectorOfTrust } from "@govuk-one-login/data-vocab/credentials.js";
 import { calculateVot } from "../calculate-vot.js";
-import { StoredIdentityJWT, StoredIdentityVectorOfTrust } from "../stored-identity-types.js";
+import { StoredIdentityRecord, StoredIdentityVectorOfTrust } from "../stored-identity-types.js";
 import logger from "../../../commons/logger.js";
 import { vi, describe, it, afterEach, expect, Mocked } from "vitest";
 
@@ -28,7 +28,7 @@ describe("calculate-vot", () => {
     ["P2", ["P3", "P2"], "P2"],
     ["P0", ["P3"], "P2"],
   ])("should return %s, for vtr %s and unsigned vot %s when max_vot not present", (expected, vtr, unsignedVot) => {
-    const jwt: StoredIdentityJWT = {} as StoredIdentityJWT;
+    const jwt: StoredIdentityRecord = {} as StoredIdentityRecord;
     const returnedVot = calculateVot(jwt, unsignedVot, vtr);
 
     expect(mockedLogger.warn).toHaveBeenCalledWith("Max VOT not in VC. Using unsigned VOT");
@@ -53,9 +53,9 @@ describe("calculate-vot", () => {
   ])(
     "should return %s, for vtr %s and unsigned vot %s when max_vot is present",
     (expected, vtr, signedVot, unsignedVot) => {
-      const jwt: StoredIdentityJWT = {
+      const jwt: StoredIdentityRecord = {
         max_vot: signedVot,
-      } as StoredIdentityJWT;
+      } as StoredIdentityRecord;
 
       const returnedVot = calculateVot(jwt, unsignedVot, vtr);
       expect(returnedVot).toEqual(expected);

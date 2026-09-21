@@ -1,4 +1,4 @@
-import { StoredIdentityJWT } from "../stored-identity-types.js";
+import { StoredIdentityRecord } from "../stored-identity-types.js";
 import { correlateCredentials } from "../credential-correlator.js";
 import { vi, describe, it, expect } from "vitest";
 
@@ -6,7 +6,7 @@ vi.mock("../../commons/logger");
 
 describe("correlateCredentials", () => {
   it("should return true when signatures in stored identity match credentials", () => {
-    const storedIdentityRecord: StoredIdentityJWT = createStoredIdentityRecord("ererwefg", "giukgmas");
+    const storedIdentityRecord: StoredIdentityRecord = createStoredIdentityRecord("ererwefg", "giukgmas");
 
     const encodedCredentialJwts = ["someheader.somebody.ererwefg", "someheader.somebody.giukgmas"];
     const encodedCredentialJwtsReversed = ["someheader.somebody.giukgmas", "someheader.somebody.ererwefg"];
@@ -16,21 +16,21 @@ describe("correlateCredentials", () => {
   });
 
   it("should return false when signatures in stored identity differ to credentials", () => {
-    const storedIdentityRecord: StoredIdentityJWT = createStoredIdentityRecord("ererwefg", "giukgmas");
+    const storedIdentityRecord: StoredIdentityRecord = createStoredIdentityRecord("ererwefg", "giukgmas");
     const encodedCredentialJwts = ["someheader.somebody.ererwefg", "someheader.somebody.baqlvsff"];
 
     expect(correlateCredentials(storedIdentityRecord, encodedCredentialJwts)).toBe(false);
   });
 
   it("should return false when stored identity has extra signature", () => {
-    const storedIdentityRecord: StoredIdentityJWT = createStoredIdentityRecord("ererwefg", "baqlvsff", "giukgmas");
+    const storedIdentityRecord: StoredIdentityRecord = createStoredIdentityRecord("ererwefg", "baqlvsff", "giukgmas");
     const encodedCredentialJwts = ["someheader.somebody.ererwefg", "someheader.somebody.baqlvsff"];
 
     expect(correlateCredentials(storedIdentityRecord, encodedCredentialJwts)).toBe(false);
   });
 
   it("should return false when stored identity has missing signature", () => {
-    const storedIdentityRecord: StoredIdentityJWT = createStoredIdentityRecord("ererwefg", "baqlvsff");
+    const storedIdentityRecord: StoredIdentityRecord = createStoredIdentityRecord("ererwefg", "baqlvsff");
     const encodedCredentialJwts = [
       "someheader.somebody.ererwefg",
       "someheader.somebody.baqlvsff",
@@ -41,14 +41,14 @@ describe("correlateCredentials", () => {
   });
 
   it("should return false when stored identity has zero signatures and there are no credentials", () => {
-    const storedIdentityRecord: StoredIdentityJWT = createStoredIdentityRecord();
+    const storedIdentityRecord: StoredIdentityRecord = createStoredIdentityRecord();
     const encodedCredentialJwts: string[] = [];
 
     expect(correlateCredentials(storedIdentityRecord, encodedCredentialJwts)).toBe(false);
   });
 });
 
-const createStoredIdentityRecord = (...signatures: string[]): StoredIdentityJWT => {
+const createStoredIdentityRecord = (...signatures: string[]): StoredIdentityRecord => {
   return {
     sub: "userId",
     credentials: signatures,

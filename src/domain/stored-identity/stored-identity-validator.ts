@@ -9,7 +9,11 @@ import { APIGatewayProxyResult } from "aws-lambda";
 import { EVCSError, StoredIdentityValidationError, TokenValidationError } from "../../commons/errors.js";
 import { UserIdentityErrorResponse } from "../../handlers/post-phase2-user-identity-handler/post-phase2-user-identity-error-response.js";
 import { auditIdentityRecordRead, auditIdentityRecordReturned } from "../../commons/audit.js";
-import { StoredIdentityJWT, isStoredIdentityJWT, StoredIdentityValidationResult } from "./stored-identity-types.js";
+import {
+  StoredIdentityRecord,
+  isStoredIdentityRecord,
+  StoredIdentityValidationResult,
+} from "./stored-identity-types.js";
 import { correlateCredentials } from "./credential-correlator.js";
 import { ErrorCodeEnum, ResponseBody } from "@govuk-one-login/event-catalogue/SIS_STORED_IDENTITY_RETURNED.js";
 
@@ -70,9 +74,9 @@ const verifySignature = async (kid: string, jwt: string): Promise<boolean> => {
 export const validateStoredIdentity = async (
   identityResponse: EVCSIdentityResponse
 ): Promise<StoredIdentityValidationResult> => {
-  const content = getJwtBody<StoredIdentityJWT>(identityResponse.si.vc);
+  const content = getJwtBody<StoredIdentityRecord>(identityResponse.si.vc);
 
-  if (!isStoredIdentityJWT(content)) {
+  if (!isStoredIdentityRecord(content)) {
     logger.error("Stored identity JWT does not match expected format");
     throw new StoredIdentityValidationError();
   }
@@ -83,7 +87,7 @@ export const validateStoredIdentity = async (
   const { kidValid, signatureValid } = await validateCryptography(kid, identityResponse);
   const isValid = correlateCredentials(content, currentVcsEncoded);
 
-  return { kidValid, signatureValid, isValid, storedIdentityJwt: content };
+  return { kidValid, signatureValid, isValid, storedIdentityRecord: content };
 };
 
 export const createErrorResponse = (errorCode: HttpCodesEnum): APIGatewayProxyResult => {

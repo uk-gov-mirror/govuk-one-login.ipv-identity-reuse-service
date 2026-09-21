@@ -1,9 +1,9 @@
 import { describe, it, expect } from "vitest";
 import { extractUserDetails, formatAddress } from "../user-details-content.js";
-import { StoredIdentityJWT, StoredIdentityClaims } from "../../../domain/stored-identity/stored-identity-types.js";
+import { StoredIdentityRecord, StoredIdentityClaims } from "../../../domain/stored-identity/stored-identity-types.js";
 import { StoredIdentityValidationError } from "../../../commons/errors.js";
 
-const buildStoredIdentityJwt = (claims: StoredIdentityClaims): StoredIdentityJWT => ({
+const buildStoredIdentityRecord = (claims: StoredIdentityClaims): StoredIdentityRecord => ({
   sub: "user-sub",
   credentials: [],
   vot: "P2",
@@ -13,7 +13,7 @@ const buildStoredIdentityJwt = (claims: StoredIdentityClaims): StoredIdentityJWT
 
 describe("extractUserDetails", () => {
   it("should extract name, dateOfBirth, and address from stored identity claims", () => {
-    const storedIdentityJwt = buildStoredIdentityJwt({
+    const storedIdentityRecord = buildStoredIdentityRecord({
       "https://vocab.account.gov.uk/v1/coreIdentity": {
         name: [
           {
@@ -36,7 +36,7 @@ describe("extractUserDetails", () => {
       ],
     });
 
-    const result = extractUserDetails(storedIdentityJwt);
+    const result = extractUserDetails(storedIdentityRecord);
 
     expect(result).toEqual({
       name: "Jane Doe",
@@ -46,7 +46,7 @@ describe("extractUserDetails", () => {
   });
 
   it("should join multiple given names with spaces", () => {
-    const storedIdentityJwt = buildStoredIdentityJwt({
+    const storedIdentityRecord = buildStoredIdentityRecord({
       "https://vocab.account.gov.uk/v1/coreIdentity": {
         name: [
           {
@@ -62,35 +62,35 @@ describe("extractUserDetails", () => {
       "https://vocab.account.gov.uk/v1/address": [{ streetName: "Test Street", postalCode: "TE1 1ST" }],
     });
 
-    const result = extractUserDetails(storedIdentityJwt);
+    const result = extractUserDetails(storedIdentityRecord);
 
     expect(result.name).toBe("Mary Jane Watson");
   });
 
   it("should throw when no name is present", () => {
-    const storedIdentityJwt = buildStoredIdentityJwt({
+    const storedIdentityRecord = buildStoredIdentityRecord({
       "https://vocab.account.gov.uk/v1/coreIdentity": {
         birthDate: [{ value: "2000-06-01" }],
       },
       "https://vocab.account.gov.uk/v1/address": [{ streetName: "Test Street", postalCode: "TE1 1ST" }],
     });
 
-    expect(() => extractUserDetails(storedIdentityJwt)).toThrow(StoredIdentityValidationError);
+    expect(() => extractUserDetails(storedIdentityRecord)).toThrow(StoredIdentityValidationError);
   });
 
   it("should throw when no birthDate is present", () => {
-    const storedIdentityJwt = buildStoredIdentityJwt({
+    const storedIdentityRecord = buildStoredIdentityRecord({
       "https://vocab.account.gov.uk/v1/coreIdentity": {
         name: [{ nameParts: [{ type: "GivenName", value: "Test" }] }],
       },
       "https://vocab.account.gov.uk/v1/address": [],
     });
 
-    expect(() => extractUserDetails(storedIdentityJwt)).toThrow(StoredIdentityValidationError);
+    expect(() => extractUserDetails(storedIdentityRecord)).toThrow(StoredIdentityValidationError);
   });
 
   it("should throw when no addresses are present", () => {
-    const storedIdentityJwt = buildStoredIdentityJwt({
+    const storedIdentityRecord = buildStoredIdentityRecord({
       "https://vocab.account.gov.uk/v1/coreIdentity": {
         name: [
           {
@@ -105,11 +105,11 @@ describe("extractUserDetails", () => {
       "https://vocab.account.gov.uk/v1/address": [],
     });
 
-    expect(() => extractUserDetails(storedIdentityJwt)).toThrow(StoredIdentityValidationError);
+    expect(() => extractUserDetails(storedIdentityRecord)).toThrow(StoredIdentityValidationError);
   });
 
   it("should return only the address with the latest validFrom when multiple addresses exist", () => {
-    const storedIdentityJwt = buildStoredIdentityJwt({
+    const storedIdentityRecord = buildStoredIdentityRecord({
       "https://vocab.account.gov.uk/v1/coreIdentity": {
         name: [{ nameParts: [{ type: "GivenName", value: "Jane" }] }],
         birthDate: [{ value: "1990-01-01" }],
@@ -120,7 +120,7 @@ describe("extractUserDetails", () => {
       ],
     });
 
-    const result = extractUserDetails(storedIdentityJwt);
+    const result = extractUserDetails(storedIdentityRecord);
 
     expect(result.addressDetailHtml).toBe("1, New Street<br>AB1 2CD");
   });
