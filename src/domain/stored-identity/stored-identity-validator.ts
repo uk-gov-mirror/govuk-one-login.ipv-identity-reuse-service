@@ -7,7 +7,7 @@ import { getJwtBody, getJwtHeader } from "../../commons/jwt-utilities.js";
 import { HttpCodesEnum } from "../../commons/constants.js";
 import { APIGatewayProxyResult } from "aws-lambda";
 import { EVCSError, StoredIdentityValidationError, TokenValidationError } from "../../commons/errors.js";
-import { UserIdentityErrorResponse } from "../../handlers/post-phase2-user-identity-handler/post-phase2-user-identity-error-response.js";
+import { UserIdentityErrorResponse } from "../../handlers/post-phase2-user-identity-handler/post-phase2-user-identity-types.js";
 import { auditIdentityRecordRead, auditIdentityRecordReturned } from "../../commons/audit.js";
 import {
   StoredIdentityRecord,

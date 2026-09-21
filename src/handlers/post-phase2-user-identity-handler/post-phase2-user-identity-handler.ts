@@ -10,12 +10,11 @@ import { calculateVot } from "../../domain/stored-identity/calculate-vot.js";
 import { getFraudVc } from "../../domain/verifiable-credential/fraud-check-service.js";
 import { hasIdentityExpired } from "../../domain/verifiable-credential/identity-expiry-service.js";
 import { VerifiableCredentialJWT } from "../../domain/verifiable-credential/verifiable-credential-types.js";
-import { UserIdentityRequest } from "./post-phase2-user-identity-request.js";
+import { UserIdentityRequest, UserIdentityResponse } from "./post-phase2-user-identity-types.js";
 import {
   StoredIdentityRecord,
   StoredIdentityVectorOfTrust,
 } from "../../domain/stored-identity/stored-identity-types.js";
-import { UserIdentityResponse } from "./post-phase2-user-identity-response.js";
 import { getProperty } from "../../commons/case-insensitive-header-utilities.js";
 import {
   getUserIdFromJwt,

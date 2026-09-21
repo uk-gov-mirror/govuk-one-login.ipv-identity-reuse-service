@@ -3,8 +3,7 @@ import { handler } from "../post-phase2-user-identity-handler.js";
 import { HttpCodesEnum } from "../../../commons/constants.js";
 import * as configuration from "../../../commons/configuration.js";
 import { Configuration } from "../../../commons/configuration.js";
-import { UserIdentityResponse } from "../post-phase2-user-identity-response.js";
-import { UserIdentityRequest } from "../post-phase2-user-identity-request.js";
+import { UserIdentityRequest, UserIdentityResponse } from "../post-phase2-user-identity-types.js";
 import * as identityExpiryService from "../../../domain/verifiable-credential/identity-expiry-service.js";
 
 import * as AuditModule from "../../../commons/audit.js";

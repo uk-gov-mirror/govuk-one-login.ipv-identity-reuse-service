@@ -1,6 +1,6 @@
 import path from "node:path";
 import { PactV4, SpecificationVersion, MatchersV3 } from "@pact-foundation/pact";
-import { UserIdentityErrorResponse } from "../../../handlers/post-phase2-user-identity-handler/post-phase2-user-identity-error-response.js";
+import { UserIdentityErrorResponse } from "../../../handlers/post-phase2-user-identity-handler/post-phase2-user-identity-types.js";
 import { describe, beforeEach, it, expect, beforeAll } from "vitest";
 
 const { like } = MatchersV3;

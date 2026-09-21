@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import logger from "../../commons/logger.js";
 import { getCookieValues } from "../../commons/cookie-utilities.js";
-import { isValidQueryParameters } from "./get-callback-request.js";
+import { isValidQueryParameters } from "./get-callback-types.js";
 import { getAuthorizationCode } from "../../api/oauth-internal-api.js";
 import { redirectToClient, redirectToErrorPage } from "../../api/sis-api.js";
 import { getRequiredEnvironment } from "../../commons/get-required-environment.js";
