@@ -1,4 +1,3 @@
-import { URL } from "node:url";
 import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
 import { DeleteSessionError, GetSessionError, SessionInvalidError } from "../../utilities/errors.js";
 import {
@@ -353,7 +352,7 @@ describe("getSessionDetails", () => {
 
     expect(jsonSpy).toHaveBeenCalledTimes(1);
     expect(globalThis.fetch).toHaveBeenCalledTimes(1);
-    expect(globalThis.fetch).toHaveBeenCalledWith(new URL("https://test.com/api/session"), {
+    expect(globalThis.fetch).toHaveBeenCalledWith("https://test.com/api/session", {
       method: "GET",
       headers: { "session-id": "test-session-id" },
       signal: expect.any(AbortSignal),
@@ -471,7 +470,7 @@ describe("updateSessionData", () => {
 
     expect(globalThis.fetch).toHaveBeenCalledTimes(1);
     expect(globalThis.fetch).toHaveBeenCalledWith(
-      new URL("https://test.com/api/session/data"),
+      "https://test.com/api/session/data",
       expect.objectContaining({
         method: "PATCH",
         headers: {
@@ -495,7 +494,7 @@ describe("updateSessionData", () => {
 
     expect(globalThis.fetch).toHaveBeenCalledTimes(1);
     expect(globalThis.fetch).toHaveBeenCalledWith(
-      new URL("https://test.com/api/session/data"),
+      "https://test.com/api/session/data",
       expect.objectContaining({
         method: "PATCH",
         headers: {
@@ -519,7 +518,7 @@ describe("deleteSession", () => {
 
     expect(globalThis.fetch).toHaveBeenCalledTimes(1);
     expect(globalThis.fetch).toHaveBeenCalledWith(
-      new URL("https://test.com/api/session"),
+      "https://test.com/api/session",
       expect.objectContaining({
         method: "DELETE",
         headers: {
@@ -540,7 +539,7 @@ describe("deleteSession", () => {
 
     expect(globalThis.fetch).toHaveBeenCalledTimes(1);
     expect(globalThis.fetch).toHaveBeenCalledWith(
-      new URL("https://test.com/api/session"),
+      "https://test.com/api/session",
       expect.objectContaining({
         method: "DELETE",
         headers: {

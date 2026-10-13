@@ -78,7 +78,7 @@ export function redirectToClient(
   }
   orchestrationRedirectUrl.searchParams.append("state", state);
 
-  return redirect({ location: `${orchestrationRedirectUrl}`, body: "" });
+  return redirect({ location: orchestrationRedirectUrl.href, body: "" });
 }
 
 export function redirect({ location, body, cookie }: RedirectOptions) {

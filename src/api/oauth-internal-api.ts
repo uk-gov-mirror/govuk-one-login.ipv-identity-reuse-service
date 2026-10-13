@@ -15,7 +15,7 @@ type AuthorizationResult = {
   redirect_uri: string;
   state: string;
   message?: string;
-  code?: string;
+  code?: "access_denied" | (string & {});
 };
 
 type AuthorizationSuccessResponse = {
@@ -73,14 +73,14 @@ export async function createAuthCode(sessionId: string) {
 
 export async function callSessionApi(clientId: string, request: string): Promise<SessionResult> {
   const oauthInternalApiUrl = getOauthInternalApiUrl();
-  const url = new URL(`${oauthInternalApiUrl}/api/session`);
+  const url = `${oauthInternalApiUrl}/api/session`;
 
   const body = JSON.stringify({
     client_id: clientId,
     request,
   });
 
-  const responseFromSessionEndpoint = await fetch(url.href, {
+  const responseFromSessionEndpoint = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -155,7 +155,7 @@ export async function getAuthorizationCode(sessionId: string): Promise<Authoriza
 
 export async function getSessionDetails(sessionId: string): Promise<GetSessionSuccessResponse> {
   const oauthInternalApiUrl = getOauthInternalApiUrl();
-  const url = new URL(`${oauthInternalApiUrl}/api/session`);
+  const url = `${oauthInternalApiUrl}/api/session`;
 
   const responseFromSessionEndpoint = await fetch(url, {
     method: "GET",
@@ -181,7 +181,7 @@ export async function getSessionDetails(sessionId: string): Promise<GetSessionSu
 
 export async function deleteSession(sessionId: string): Promise<void> {
   const oauthInternalApiUrl = getOauthInternalApiUrl();
-  const url = new URL(`${oauthInternalApiUrl}/api/session`);
+  const url = `${oauthInternalApiUrl}/api/session`;
 
   const responseFromSessionEndpoint = await fetch(url, {
     method: "DELETE",
@@ -198,7 +198,7 @@ export async function deleteSession(sessionId: string): Promise<void> {
 
 export async function updateSessionData(sessionId: string, data: Record<string, string | null>): Promise<void> {
   const oauthInternalApiUrl = getOauthInternalApiUrl();
-  const url = new URL(`${oauthInternalApiUrl}/api/session/data`);
+  const url = `${oauthInternalApiUrl}/api/session/data`;
 
   const responseFromSessionEndpoint = await fetch(url, {
     method: "PATCH",
