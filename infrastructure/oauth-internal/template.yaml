@@ -150,7 +150,7 @@ Mappings:
       LogGroupRetentionInDays: 90
       OrchestrationIssuer: "orchestrator"
       OrchestrationJwksEndpoint: none
-      OrchestrationRedirectURI: none
+      OrchestrationRedirectURI: "https://orch.reuse.stubs.account.gov.uk"
       SISAudience: "https://reuse-identity.staging.account.gov.uk"
     "integration":
       DynatraceLayerArn: "arn:aws:lambda:eu-west-2:216552277552:layer:Dynatrace_OneAgent_1_329_73_20260123-140641_with_collector_nodejs_arm:1"
@@ -394,23 +394,23 @@ Resources:
       Type: String
       Value: !Ref AccessTokenIndexWithEventDataIpvIndexName
 
-  IPVCoreAuthenticationAlgParameter:
+  OrchestrationStubAuthenticationAlgParameter:
     Type: AWS::SSM::Parameter
-    Condition: IsDevOrBuild
+    Condition: IsNotProduction
     Properties:
       Name: !Sub "/${OAuthCommon.Outputs.StackName}/clients/${OAuthClientId}/jwtAuthentication/authenticationAlg"
       Type: String
       Value: ES256
 
-  IPVCoreAudienceParameter:
+  OrchestrationStubAudienceParameter:
     Type: AWS::SSM::Parameter
-    Condition: IsDevOrBuild
+    Condition: IsNotProduction
     Properties:
       Name: !Sub "/${OAuthCommon.Outputs.StackName}/clients/${OAuthClientId}/jwtAuthentication/audience"
       Type: String
       Value: !FindInMap [ EnvironmentMap, !Ref Environment, SISAudience ]
 
-  IPVCoreIssuerParameter:
+  OrchestrationStubIssuerParameter:
     Type: AWS::SSM::Parameter
     Condition: IsNotProduction
     Properties:
@@ -418,9 +418,9 @@ Resources:
       Type: String
       Value: !FindInMap [EnvironmentMap, !Ref "Environment", OrchestrationIssuer]
 
-  IPVCoreRedirectURIParameter:
+  OrchestrationStubRedirectURIParameter:
     Type: AWS::SSM::Parameter
-    Condition: IsDevOrBuild
+    Condition: IsNotProduction
     Properties:
       Name: !Sub "/${OAuthCommon.Outputs.StackName}/clients/${OAuthClientId}/jwtAuthentication/redirectUri"
       Type: String
@@ -429,7 +429,7 @@ Resources:
         - !Ref OrchestrationRedirectURIOverride
         - !FindInMap [ EnvironmentMap, !Ref Environment, OrchestrationRedirectURI ]
 
-  IPVCoreJwksEndpointParameter:
+  OrchestrationStubJwksEndpointParameter:
     Type: AWS::SSM::Parameter
     Condition: IsNotProduction
     Properties:
